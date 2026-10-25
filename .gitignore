@@ -1,0 +1,5 @@
+# Negeer alle CSV-bestanden in alle mappen
+*.csv
+
+# Behalve dit bestand
+!/csv/cats.csv

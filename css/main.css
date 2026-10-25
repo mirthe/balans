@@ -1,0 +1,97 @@
+body {margin: 0;
+    color: var(--color-text);
+    font-family: "Atkinson Hyperlegible Next", sans-serif;}
+
+input, select, textarea, button {font: inherit;}
+
+header {
+    background: var(--color-primary); 
+    padding: 1rem; 
+    margin: 0;
+
+    a {color: var(--color-header-text); text-decoration: none;}
+
+    h1 {display: none;}
+    
+    nav {float: right; margin-left: 2rem; text-align: right;
+
+        ul {
+            display: flex;
+            gap: 0.5rem;
+            margin: 0;
+            padding: 0;
+
+            li {list-style: none;}
+            li:not(:last-child)::after {content: " | "; 
+                color: var(--color-header-text); margin-left: 0.5rem;}
+
+            a[aria-current="page"] {
+                text-decoration: underline;
+                text-underline-offset: 0.2em;
+            }
+        }
+
+        .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 1.5rem;
+            min-height: 1.5rem;
+            margin-top: 1rem;
+            padding: 0;
+            border: 0;
+            background: none;
+            color: var(--color-header-text);
+            font: inherit;
+            cursor: pointer;
+        }
+
+        .theme-toggle:hover,
+        .theme-toggle:focus-visible {
+            opacity: 0.8;
+        }
+
+        .theme-toggle:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 2px;
+        }
+    }
+}
+
+.theme-icon-sun {display: none;}
+
+:root[data-theme="dark"] .theme-icon-moon {display: none;}
+:root[data-theme="dark"] .theme-icon-sun {display: inline;}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .theme-icon-moon {display: none;}
+    :root:not([data-theme]) .theme-icon-sun {display: inline;}
+}
+      
+ul.filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.5rem 0; padding: 0;
+
+    li {list-style: none;}
+    li:not(:last-child)::after {content: " | "; 
+        color: var(--color-header-text); margin: auto 0.2rem;}
+
+    a {margin: 0; padding: 0;}
+    a[aria-current="page"] {
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+    }
+}
+
+main {margin: 0;
+    padding: 2rem;
+    background: var(--color-surface);}
+
+main.narrow {max-width: 85vh;}
+
+a {
+    color: var(--color-accent);
+    text-decoration: none;
+}

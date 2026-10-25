@@ -1,0 +1,52 @@
+:root {
+
+    color-scheme: light;
+
+  --color-primary: #F0533D;
+  --color-primary-hover: #D94330;
+  --color-accent: #F47D6C;
+  --color-header-text: #FFFFFF;
+
+  --color-text: #343030;
+  --color-text-muted: #706C6C;
+  --color-border: #E4E0DC;
+
+  --color-background: #F6F4F1;
+  --color-surface: #FFFFFF;
+  --color-surface-muted: #FAFAFA;
+
+  --color-income: #287653;
+  --color-income-background: #EFF7F0;
+  --color-expense: #D94B38;
+  --color-expense-background: #FDF0EF;
+}
+
+
+
+/* A manually selected theme overrides the system preference. */
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --color-text: #f0ece8;
+    --color-text-muted: #b7b0aa;
+    --color-border: #514b47;
+    --color-background: #211f1e;
+    --color-surface: #302c2a;
+    --color-surface-muted: #393533;
+    --color-income-background: #20372c;
+    --color-expense-background: #4b2b28;
+}
+
+@media (prefers-color-scheme: dark) {
+    /* Follow the system only until the user has made a manual selection. */
+    :root:not([data-theme]) {
+        color-scheme: dark;
+        --color-text: #f0ece8;
+        --color-text-muted: #b7b0aa;
+        --color-border: #514b47;
+        --color-background: #211f1e;
+        --color-surface: #302c2a;
+        --color-surface-muted: #393533;
+        --color-income-background: #20372c;
+        --color-expense-background: #4b2b28;
+    }
+}
