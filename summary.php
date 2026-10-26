@@ -139,7 +139,7 @@ $chartStartAngle = -90;
                                     </td>
                                     <td class="amount"><?= escapeHtml($formatAmount(-$totals['expenses'])) ?></td>
                                     <td class="amount"><?= escapeHtml($formatAmount($totals['income'])) ?></td>
-                                    <td class="amount"><?= escapeHtml($formatAmount($totals['expenses'] - $totals['income'])) ?></td>
+                                    <td class="amount"><?= escapeHtml($formatAmount($totals['income'] - $totals['expenses'])) ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -149,7 +149,7 @@ $chartStartAngle = -90;
                                     <th scope="row">Totaal</th>
                                     <th class="amount"><?= escapeHtml($formatAmount(-$grandExpenses)) ?></th>
                                     <th class="amount"><?= escapeHtml($formatAmount($grandIncome)) ?></th>
-                                    <th class="amount"><?= escapeHtml($formatAmount($grandExpenses - $grandIncome)) ?></th>
+                                    <th class="amount"><?= escapeHtml($formatAmount($grandIncome - $grandExpenses)) ?></th>
                                 </tr>
                             </tfoot>
                         <?php endif; ?>
