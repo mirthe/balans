@@ -229,7 +229,7 @@ $totalAmount = ($totalAmountCents < 0 ? '-' : '')
                                             <?= escapeHtml($row[2]) ?>
                                         <?php endif; ?>
                                     <?php else: ?>
-                                        <?= escapeHtml($value) ?>
+                                        <?= escapeHtml($index === 10 ? number_format((float) $value, 2, ',', '.') : $value) ?>
                                     <?php endif; ?>
                                 </td>
                             <?php endforeach; ?>

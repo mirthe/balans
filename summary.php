@@ -53,10 +53,10 @@ ksort($categoryTotals, SORT_NATURAL | SORT_FLAG_CASE);
 $formatAmount = static function (int $cents): string {
     $absoluteCents = abs($cents);
     $sign = $cents < 0 ? '-' : '';
-    $wholeEuros = (string) intdiv($absoluteCents, 100);
+    $wholeEuros = number_format(intdiv($absoluteCents, 100), 0, ',', '.');
     $fractionalCents = str_pad((string) ($absoluteCents % 100), 2, '0', STR_PAD_LEFT);
 
-    return $sign . $wholeEuros . '.' . $fractionalCents;
+    return $sign . $wholeEuros . ',' . $fractionalCents;
 };
 
 $rankedCategories = array_filter($categoryTotals, static function (array $totals): bool {
