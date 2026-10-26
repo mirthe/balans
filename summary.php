@@ -53,10 +53,10 @@ ksort($categoryTotals, SORT_NATURAL | SORT_FLAG_CASE);
 $formatAmount = static function (int $cents): string {
     $absoluteCents = abs($cents);
     $sign = $cents < 0 ? '-' : '';
-    $wholeEuros = number_format(intdiv($absoluteCents, 100), 0, ',', '.');
+    $wholeEuros = (string) intdiv($absoluteCents, 100);
     $fractionalCents = str_pad((string) ($absoluteCents % 100), 2, '0', STR_PAD_LEFT);
 
-    return $sign . '€ ' . $wholeEuros . ',' . $fractionalCents;
+    return $sign . $wholeEuros . '.' . $fractionalCents;
 };
 
 $rankedCategories = array_filter($categoryTotals, static function (array $totals): bool {
@@ -67,9 +67,6 @@ uasort($rankedCategories, static function (array $left, array $right): int {
 });
 $chartCategories = array_slice($rankedCategories, 0, 10, true);
 $otherExpenses = array_sum(array_column(array_slice($rankedCategories, 10, null, true), 'expenses'));
-if ($otherExpenses > 0) {
-    $chartCategories['Overig'] = ['expenses' => $otherExpenses, 'income' => 0];
-}
 
 $chartColors = ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f', '#9c755f'];
 $chartSegments = [];
@@ -85,7 +82,15 @@ foreach ($chartCategories as $category => $totals) {
     }
 }
 
-$chartTotal = array_sum(array_column($chartSegments, 'amount'));
+if ($otherExpenses > 0) {
+    $chartSegments[] = [
+        'category' => 'Overig',
+        'amount' => $otherExpenses,
+        'color' => $chartColors[$colorIndex % count($chartColors)],
+    ];
+}
+
+$chartTotal = $grandExpenses;
 $chartStartAngle = -90;
 ?>
 <!doctype html>
@@ -111,6 +116,7 @@ $chartStartAngle = -90;
                                 <th scope="col">Categorie</th>
                                 <th scope="col">Uitgaven</th>
                                 <th scope="col">Inkomsten</th>
+                                <th scope="col">Totaal</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -131,8 +137,9 @@ $chartStartAngle = -90;
                                             <?= escapeHtml($category) ?>
                                         </a>
                                     </td>
-                                    <td class="amount"><?= escapeHtml($formatAmount($totals['expenses'])) ?></td>
+                                    <td class="amount"><?= escapeHtml($formatAmount(-$totals['expenses'])) ?></td>
                                     <td class="amount"><?= escapeHtml($formatAmount($totals['income'])) ?></td>
+                                    <td class="amount"><?= escapeHtml($formatAmount($totals['expenses'] - $totals['income'])) ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -140,8 +147,9 @@ $chartStartAngle = -90;
                             <tfoot>
                                 <tr>
                                     <th scope="row">Totaal</th>
-                                    <th class="amount"><?= escapeHtml($formatAmount($grandExpenses)) ?></th>
+                                    <th class="amount"><?= escapeHtml($formatAmount(-$grandExpenses)) ?></th>
                                     <th class="amount"><?= escapeHtml($formatAmount($grandIncome)) ?></th>
+                                    <th class="amount"><?= escapeHtml($formatAmount($grandExpenses - $grandIncome)) ?></th>
                                 </tr>
                             </tfoot>
                         <?php endif; ?>
