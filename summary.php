@@ -90,6 +90,47 @@ if ($otherExpenses > 0) {
     ];
 }
 
+$sortBy = $_GET['sorteer'] ?? 'categorie';
+$sortDirections = [
+    'categorie' => 'ascending',
+    'uitgaven' => 'descending',
+    'inkomsten' => 'descending',
+    'totaal' => 'descending',
+];
+if (!is_string($sortBy) || !isset($sortDirections[$sortBy])) {
+    http_response_code(400);
+    exit('Ongeldige sorteerkolom.');
+}
+
+$sortValues = $categoryTotals;
+uksort($categoryTotals, static function (string $leftCategory, string $rightCategory) use ($sortBy, $sortValues): int {
+    if ($sortBy === 'categorie') {
+        return strnatcasecmp($leftCategory, $rightCategory);
+    }
+
+    $leftValue = match ($sortBy) {
+        'uitgaven' => $sortValues[$leftCategory]['expenses'],
+        'inkomsten' => $sortValues[$leftCategory]['income'],
+        'totaal' => $sortValues[$leftCategory]['income'] - $sortValues[$leftCategory]['expenses'],
+    };
+    $rightValue = match ($sortBy) {
+        'uitgaven' => $sortValues[$rightCategory]['expenses'],
+        'inkomsten' => $sortValues[$rightCategory]['income'],
+        'totaal' => $sortValues[$rightCategory]['income'] - $sortValues[$rightCategory]['expenses'],
+    };
+
+    return $rightValue <=> $leftValue;
+});
+
+$sortUrl = static function (string $column) use ($selectedYear, $selectedMonth): string {
+    $query = ['jaar' => $selectedYear, 'sorteer' => $column];
+    if ($selectedMonth !== null) {
+        $query['maand'] = $selectedMonth;
+    }
+
+    return '?' . http_build_query($query);
+};
+
 $chartTotal = $grandExpenses;
 $chartStartAngle = -90;
 ?>
@@ -113,10 +154,18 @@ $chartStartAngle = -90;
                     <table>
                         <thead>
                             <tr>
-                                <th scope="col">Categorie</th>
-                                <th scope="col">Uitgaven</th>
-                                <th scope="col">Inkomsten</th>
-                                <th scope="col">Totaal</th>
+                                <th scope="col" aria-sort="<?= $sortBy === 'categorie' ? 'ascending' : 'none' ?>">
+                                    <span class="summary-sort-header">Categorie <a class="summary-sort-link" href="<?= escapeHtml($sortUrl('categorie')) ?>" aria-label="Sorteer categorie oplopend"><i class="fa-solid fa-sort" aria-hidden="true"></i></a></span>
+                                </th>
+                                <th scope="col" aria-sort="<?= $sortBy === 'uitgaven' ? 'descending' : 'none' ?>">
+                                    <span class="summary-sort-header">Uitgaven <a class="summary-sort-link" href="<?= escapeHtml($sortUrl('uitgaven')) ?>" aria-label="Sorteer uitgaven aflopend"><i class="fa-solid fa-sort" aria-hidden="true"></i></a></span>
+                                </th>
+                                <th scope="col" aria-sort="<?= $sortBy === 'inkomsten' ? 'descending' : 'none' ?>">
+                                    <span class="summary-sort-header">Inkomsten <a class="summary-sort-link" href="<?= escapeHtml($sortUrl('inkomsten')) ?>" aria-label="Sorteer inkomsten aflopend"><i class="fa-solid fa-sort" aria-hidden="true"></i></a></span>
+                                </th>
+                                <th scope="col" aria-sort="<?= $sortBy === 'totaal' ? 'descending' : 'none' ?>">
+                                    <span class="summary-sort-header">Totaal <a class="summary-sort-link" href="<?= escapeHtml($sortUrl('totaal')) ?>" aria-label="Sorteer totaal aflopend"><i class="fa-solid fa-sort" aria-hidden="true"></i></a></span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>

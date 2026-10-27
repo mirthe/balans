@@ -6,9 +6,26 @@
 .search-filter input[type="search"] { max-width: 20rem; }
 .category-icon { margin-right: 0.25rem; }
 
+.filters button, .note-editor button, .notes-form > button {
+    appearance: none;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.25rem;
+    background: var(--color-surface-muted);
+    color: var(--color-text);
+    cursor: pointer;
+}
+.filters button:hover, .note-editor button:hover, .notes-form > button:hover {
+    background: var(--color-border);
+}
+.filters button:focus-visible, .note-editor button:focus-visible, .notes-form > button:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
 td.amount.expense { background: var(--color-expense-background); color: var(--color-expense); }
 td.amount.income { background: var(--color-income-background); color: var(--color-income); }
-td.notes-submit-cell { text-align: right; }
+td.notes-submit-cell { text-align: center; }
 td.description { white-space: normal; min-width: 20rem; max-width: 36rem; }
 td.counterparty { white-space: normal; width: 16rem; max-width: 16rem; overflow-wrap: anywhere; }
 

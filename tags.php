@@ -9,7 +9,7 @@ foreach ($rows as $row) {
 }
 
 $notes = [];
-$notesFile = __DIR__ . '/notes/' . $selectedYear . '_notes.csv';
+$notesFile = __DIR__ . '/csv/' . $selectedYear . '_tags.csv';
 if (is_file($notesFile)) {
     $notesHandle = fopen($notesFile, 'r');
     if ($notesHandle === false) {

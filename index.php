@@ -78,7 +78,7 @@ $categoryOptions = array_values(array_filter(
 ));
 
 $notes = [];
-$notesFile = __DIR__ . '/notes/' . $selectedYear . '_notes.csv';
+$notesFile = __DIR__ . '/csv/' . $selectedYear . '_tags.csv';
 if (is_file($notesFile)) {
     $notesHandle = fopen($notesFile, 'r');
     if ($notesHandle === false) {
@@ -93,7 +93,7 @@ if (is_file($notesFile)) {
     fclose($notesHandle);
 }
 
-$headers[] = 'Notitie';
+$headers[] = 'Tags';
 $headers[21] = 'Naam / tegenrekening';
 $visibleColumns = [0, 19, 21, 17, 20, 10];
 
@@ -134,7 +134,6 @@ foreach ($rows as $row) {
 
 $absoluteTotalCents = abs($totalAmountCents);
 $totalAmount = ($totalAmountCents < 0 ? '-' : '')
-    . '€ '
     . number_format(intdiv($absoluteTotalCents, 100), 0, ',', '.')
     . ','
     . str_pad((string) ($absoluteTotalCents % 100), 2, '0', STR_PAD_LEFT);
@@ -143,7 +142,7 @@ $totalAmount = ($totalAmountCents < 0 ? '-' : '')
 <html lang="nl">
 <head>
     <?php include 'inc/header.php' ?>
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/listing.css">
 </head>
 <body>
     <header>
@@ -216,7 +215,7 @@ $totalAmount = ($totalAmountCents < 0 ? '-' : '')
                                         </a>
                                     <?php elseif ($index === 20): ?>
                                         <div class="note-editor">
-                                            <input type="text" name="notities[t<?= escapeHtml($transactionNumber) ?>]" value="<?= escapeHtml($value) ?>" aria-label="Notitie voor transactie <?= escapeHtml($transactionNumber) ?>">
+                                            <input type="text" name="notities[t<?= escapeHtml($transactionNumber) ?>]" value="<?= escapeHtml($value) ?>" title="Tags spatie-gescheiden invoeren" aria-label="Spatie-gescheiden tags voor transactie <?= escapeHtml($transactionNumber) ?>">
                                             <button type="submit" aria-label="Alle notities opslaan"><i class="fa fa-save"></i></button>
                                         </div>
                                         <small class="transaction-number"><?= escapeHtml($transactionNumber) ?></small>

@@ -81,7 +81,7 @@ foreach ($transactionNumbers as $transactionNumber) {
     }
 }
 
-$notesFile = __DIR__ . '/notes/' . $year . '_notes.csv';
+$notesFile = __DIR__ . '/csv/' . $year . '_tags.csv';
 $notesHandle = fopen($notesFile, 'c+');
 if ($notesHandle === false) {
     error_log('Kan notitiebestand niet openen: ' . $notesFile);

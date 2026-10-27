@@ -17,17 +17,19 @@ header {
 
         ul {
             display: flex;
+            align-items: center;
             gap: 0.5rem;
             margin: 0;
             padding: 0;
 
-            li {list-style: none;}
-            li:not(:last-child)::after {content: " | "; 
-                color: var(--color-header-text); margin-left: 0.5rem;}
+            li {list-style: none; margin-left: 0.5rem;}
+            li.theme-toggle-item {display: flex; align-items: center;}
 
+            a {margin-top: 4px;}
             a[aria-current="page"] {
-                text-decoration: underline;
-                text-underline-offset: 0.2em;
+                display: inline-flex;
+                border-bottom: 2px solid currentColor;
+                padding-bottom: 2px;
             }
         }
 
@@ -37,7 +39,7 @@ header {
             justify-content: center;
             min-width: 1.5rem;
             min-height: 1.5rem;
-            margin-top: 1rem;
+            margin: 0;
             padding: 0;
             border: 0;
             background: none;

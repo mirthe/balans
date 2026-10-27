@@ -5,11 +5,20 @@ function escapeHtml(?string $value): string
 }
 
 $currentYear = (int) date('Y');
-$years = range($currentYear, 2021);
-$selectedYear = $_GET['jaar'] ?? (string) $currentYear;
-if (!is_string($selectedYear) || !in_array((int) $selectedYear, $years, true) || !preg_match('/^\d{4}$/', $selectedYear)) {
+$yearFiles = glob(dirname(__DIR__) . '/csv/[0-9][0-9][0-9][0-9].csv');
+$years = array_map(
+    static fn(string $yearFile): int => (int) basename($yearFile, '.csv'),
+    $yearFiles === false ? [] : $yearFiles
+);
+rsort($years, SORT_NUMERIC);
+$selectedYear = $_GET['jaar'] ?? ($years[0] ?? (string) $currentYear);
+if (
+    !is_string($selectedYear)
+    || preg_match('/^\d{4}$/', $selectedYear) !== 1
+    || !in_array((int) $selectedYear, $years, true)
+) {
     http_response_code(400);
-    exit('Ongeldig jaar. Kies een jaar vanaf ' . $currentYear . ' tot en met 2021.');
+    exit('Ongeldig jaar. Kies een beschikbaar jaar.');
 }
 
 $months = [];
