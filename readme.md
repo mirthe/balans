@@ -9,6 +9,11 @@ Een kleine, zelfgebouwde PHP-applicatie om financiële transacties lokaal te bek
 - Transacties en categorieën bekijken en beheren.
 - Financiële gegevens lokaal opslaan en naar eigen inzicht organiseren.
 
+<p align="center">
+  <img src="screenshot1.png" width="48%">
+  <img src="screenshot2.png" width="48%">
+</p>
+
 ## Technologie
 
 - PHP
