@@ -10,8 +10,8 @@ Een kleine, zelfgebouwde PHP-applicatie om financiële transacties lokaal te bek
 - Financiële gegevens lokaal opslaan en naar eigen inzicht organiseren.
 
 <p align="center">
-  <img src="screenshot1.png" width="40%" style="border: 1px solid silver; margin-right: 2%">
-  <img src="screenshot2.png" width="40%" style="border: 1px solid silver">
+  <img src="screenshot1.png" width="40%" style="border: 1px solid silver; margin-right: 2%; vertical-align: top">
+  <img src="screenshot2.png" width="40%" style="border: 1px solid silver; vertical-align: top">
 </p>
 
 ## Technologie
