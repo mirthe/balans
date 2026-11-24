@@ -44,7 +44,7 @@ csv/
 3. Plaats het bestand in de map `csv/`.
 4. Gebruik één CSV-bestand per kalenderjaar.
 5. Plaats spatie-gescheiden tags in het Notitie-veld voor verder overzicht.
-6. Loop na importeren de transacties van bijvoorbeeld Tikkie, Paypal en Betaalverzoek na, die zijn vaak verkeerd gecategoriseerd.
+6. Loop na importeren de transacties van bijvoorbeeld Tikkie, Paypal en Betaalverzoek na, die zijn vaak verkeerd gecategoriseerd. Dit kun je oplossen door Tags toe te voegen. Eventueel kun je de tags ook handmatig corrigeren in de ASN Bank interface en een nieuwe export maken.
 
 De exacte bestandsnamen en CSV-indeling moeten overeenkomen met de manier waarop de applicatie de bestanden verwerkt.
 
