@@ -35,8 +35,21 @@ $largestMonthlyTotal = 0;
 foreach ($monthlyTotals as $totals) {
     $largestMonthlyTotal = max($largestMonthlyTotal, $totals['expenses'], $totals['income']);
 }
-$chartStepEuros = max(1, (int) ceil(($largestMonthlyTotal / 100) / 4));
-$chartScaleCents = $chartStepEuros * 4 * 100;
+$rawChartStepCents = $largestMonthlyTotal / 4;
+if ($rawChartStepCents <= 0) {
+    $chartStepCents = 100;
+} else {
+    $stepMagnitude = 10 ** floor(log10($rawChartStepCents));
+    $normalizedStep = $rawChartStepCents / $stepMagnitude;
+    $stepMultiplier = match (true) {
+        $normalizedStep <= 1 => 1,
+        $normalizedStep <= 2 => 2,
+        $normalizedStep <= 5 => 5,
+        default => 10,
+    };
+    $chartStepCents = max(1, (int) ($stepMultiplier * $stepMagnitude));
+}
+$chartScaleCents = $chartStepCents * 4;
 
 $formatAmount = static function (int $cents): string {
     $absoluteCents = abs($cents);
@@ -45,4 +58,10 @@ $formatAmount = static function (int $cents): string {
     $fractionalCents = str_pad((string) ($absoluteCents % 100), 2, '0', STR_PAD_LEFT);
 
     return $sign . $wholeEuros . ',' . $fractionalCents;
+};
+
+$formatAxisAmount = static function (int $cents) use ($formatAmount): string {
+    return $cents % 100 === 0
+        ? number_format(intdiv($cents, 100), 0, ',', '.')
+        : $formatAmount($cents);
 };

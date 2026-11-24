@@ -1,6 +1,6 @@
 .trend-panel { max-width: 64rem; margin: 0 auto; padding: 1rem; }
 .trend-panel h2 { margin-top: 0; }
-.trend-chart-panel { margin-bottom: 1rem; padding: 1rem; border: 1px solid var(--color-border); border-radius: 0.25rem; }
+.trend-chart-frame { margin-bottom: 1rem; padding: 0.5rem; border: 1px solid var(--color-border); }
 .trend-chart { display: block; width: 100%; height: auto; overflow: visible; }
 .trend-gridline { stroke: var(--color-border); stroke-width: 1; }
 .trend-axis-label, .trend-month-label { fill: var(--color-text-muted); font: 0.75rem sans-serif; }
@@ -8,7 +8,7 @@
 .trend-income { fill: var(--color-income); }
 .trend-swatch.trend-expense { background-color: var(--color-expense); }
 .trend-swatch.trend-income { background-color: var(--color-income); }
-.trend-legend { display: flex; flex-wrap: wrap; gap: 1rem; margin: 0.5rem 0 1rem; padding: 0; }
+.trend-legend { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 1rem; margin: 0.5rem 0 0; padding: 0; }
 .trend-legend li { display: flex; align-items: center; gap: 0.4rem; list-style: none; }
 .trend-swatch { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 0.1rem; }
 .trends-table caption { padding: 0 0 0.5rem; text-align: left; font-weight: normal; }

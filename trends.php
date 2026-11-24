@@ -35,23 +35,23 @@ $formatSvgNumber = static fn(float $value): string => number_format($value, 2, '
     </div>
     <main>
         <section class="trend-panel" aria-labelledby="trends-heading">
-            <div class="trend-chart-panel">
             <h2 id="trends-heading">Inkomsten en uitgaven per maand</h2>
             <p>Vergelijk de maandtotalen voor <?= escapeHtml($selectedYear) ?>.</p>
             <p>Het saldo is inkomsten min uitgaven en komt overeen met het totaal in het transactieoverzicht.</p>
             <?php if ($rows === []): ?>
                 <p role="status">Geen transacties gevonden voor deze selectie.</p>
             <?php else: ?>
+                <div class="trend-chart-frame">
                 <svg class="trend-chart" viewBox="0 0 840 330" role="img" aria-labelledby="trend-chart-title trend-chart-description">
                     <title id="trend-chart-title">Inkomsten en uitgaven per maand in <?= escapeHtml($selectedYear) ?></title>
                     <desc id="trend-chart-description">Staafdiagram met de inkomsten en uitgaven van januari tot en met december. De tabel onder de grafiek bevat de exacte maandtotalen.</desc>
                     <?php for ($tick = 0; $tick <= 4; $tick++): ?>
                         <?php
                         $tickY = $plotBottom - ($plotHeight * $tick / 4);
-                        $tickEuros = $chartStepEuros * $tick;
+                        $tickCents = $chartStepCents * $tick;
                         ?>
                         <line class="trend-gridline" x1="<?= $plotLeft ?>" y1="<?= $formatSvgNumber($tickY) ?>" x2="<?= $plotLeft + $plotWidth ?>" y2="<?= $formatSvgNumber($tickY) ?>"></line>
-                        <text class="trend-axis-label" x="4" y="<?= $formatSvgNumber($tickY + 4) ?>">€ <?= escapeHtml(number_format($tickEuros, 0, ',', '.')) ?></text>
+                        <text class="trend-axis-label" x="4" y="<?= $formatSvgNumber($tickY + 4) ?>">€ <?= escapeHtml($formatAxisAmount($tickCents)) ?></text>
                     <?php endfor; ?>
                     <?php foreach ($monthLabels as $monthIndex => $monthLabel): ?>
                         <?php
@@ -80,8 +80,8 @@ $formatSvgNumber = static fn(float $value): string => number_format($value, 2, '
                     <li><span class="trend-swatch trend-expense" aria-hidden="true"></span> Uitgaven</li>
                     <li><span class="trend-swatch trend-income" aria-hidden="true"></span> Inkomsten</li>
                 </ul>
+                </div>
             <?php endif; ?>
-            </div>
             <?php if ($rows !== []): ?>
                 <section class="trend-table-panel" aria-labelledby="monthly-totals-heading">
                     <h2 id="monthly-totals-heading">Maandtotalen</h2>
