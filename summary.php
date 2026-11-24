@@ -18,6 +18,8 @@ include 'inc/init_summary.php';
     <main>
         <div class="summary-grid">
             <section class="summary-panel" aria-labelledby="category-totals-heading">
+                <h2 id="category-totals-heading">Totalen per categorie</h2>
+                <p>Inkomsten, uitgaven en saldo per categorie voor de gekozen periode. Klik op een categorie om de bijbehorende transacties te bekijken.</p>
                 <div class="table-container summary-table">
                     <table>
                         <thead>

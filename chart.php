@@ -1,4 +1,6 @@
 <section class="summary-panel chart-panel" aria-labelledby="expenses-chart-heading">
+    <h2 id="expenses-chart-heading">Verdeling van de uitgaven</h2>
+    <p>De cirkel toont de 10 grootste uitgavencategorieën; overige uitgaven zijn samengevoegd onder Overig.</p>
     <?php if ($chartTotal > 0): ?>
         <svg class="pie-chart" viewBox="0 0 200 200" role="img" aria-labelledby="pie-chart-title pie-chart-description">
             <title id="pie-chart-title">Verdeling van uitgaven per categorie</title>

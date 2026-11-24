@@ -17,6 +17,8 @@ include 'inc/init_tags.php';
         <?php include 'inc/sel_month.php' ?>
     </header>
     <main class="narrow">
+        <h2>Tags</h2>
+        <p>Tags zijn gerangschikt op gebruik binnen de gekozen periode. Klik op een tag om de bijbehorende transacties te bekijken.</p>
         <?php if (!$fileAvailable): ?>
             <p role="status">Het bestand voor <?= escapeHtml($selectedYear) ?> is nog niet beschikbaar.</p>
         <?php elseif ($tagCounts === []): ?>
