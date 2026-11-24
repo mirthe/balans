@@ -1,142 +1,7 @@
 <?php
 session_start();
 include 'inc/init.php';
-
-if (!isset($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-
-$categoriesFile = __DIR__ . '/csv/cats.csv';
-$categoriesHandle = fopen($categoriesFile, 'r');
-if ($categoriesHandle === false) {
-    throw new RuntimeException('Het categorie-bestand kon niet worden geopend.');
-}
-
-$categories = [];
-$categoryIcons = [];
-while (($categoryRow = fgetcsv($categoriesHandle, 0, ';', '"', '')) !== false) {
-    $category = trim($categoryRow[0] ?? '', " \t\n\r\0\x0B'");
-    if ($category !== '') {
-        $categories[] = $category;
-        $icon = trim($categoryRow[1] ?? '');
-        if (preg_match('/^fa-[a-z0-9-]+$/D', $icon) === 1) {
-            $categoryIcons[$category] = $icon;
-        }
-    }
-}
-fclose($categoriesHandle);
-
-$selectedCategory = $_GET['categorie'] ?? null;
-if ($selectedCategory === '') {
-    $selectedCategory = null;
-}
-if ($selectedCategory !== null && (!is_string($selectedCategory) || !in_array($selectedCategory, $categories, true))) {
-    http_response_code(400);
-    exit('Ongeldige categorie.');
-}
-
-$selectedSearch = $_GET['zoek'] ?? '';
-if (!is_string($selectedSearch)) {
-    http_response_code(400);
-    exit('Ongeldige zoekterm.');
-}
-$selectedSearch = trim($selectedSearch);
-
-$headers = [
-    'Datum',
-    'Rekening',
-    'Tegenrekening',
-    'Naam tegenrekening',
-    'Extra veld 5',
-    'Extra veld 6',
-    'Extra veld 7',
-    'Valuta saldo',
-    'Saldo',
-    'Valuta transactie',
-    'Bedrag',
-    'Boekingsdatum',
-    'Valutadatum',
-    'Transactiecode',
-    'Transactietype',
-    'Transactienr',
-    'Kenmerk',
-    'Omschrijving',
-    'Volgnummer',
-    'Categorie',
-];
-
-$usedCategories = [];
-foreach ($yearRows as $row) {
-    $category = trim($row[19] ?? '', " \t\n\r\0\x0B'");
-    if ($category !== '') {
-        $usedCategories[$category] = true;
-    }
-}
-$categoryOptions = array_values(array_filter(
-    $categories,
-    static fn(string $category): bool => isset($usedCategories[$category])
-));
-
-$notes = [];
-$notesFile = __DIR__ . '/csv/' . $selectedYear . '_tags.csv';
-if (is_file($notesFile)) {
-    $notesHandle = fopen($notesFile, 'r');
-    if ($notesHandle === false) {
-        throw new RuntimeException('Het notitiebestand kon niet worden geopend.');
-    }
-
-    while (($noteRow = fgetcsv($notesHandle, 0, ',', '"', '')) !== false) {
-        if (isset($noteRow[0], $noteRow[1])) {
-            $notes[$noteRow[0]] = $noteRow[1];
-        }
-    }
-    fclose($notesHandle);
-}
-
-$headers[] = 'Tags';
-$headers[21] = 'Naam / tegenrekening';
-$visibleColumns = [0, 19, 21, 17, 20, 10];
-
-if ($selectedCategory !== null) {
-    $rows = array_values(array_filter($rows, static function (array $row) use ($selectedCategory): bool {
-        return trim($row[19] ?? '', " \t\n\r\0\x0B'") === $selectedCategory;
-    }));
-}
-
-if ($selectedSearch !== '') {
-    $rows = array_values(array_filter($rows, static function (array $row) use ($selectedSearch, $notes): bool {
-        $searchableValues = [$row[3] ?? '', $row[2] ?? '', $row[17] ?? '', $row[15] ?? ''];
-        $transactionNumber = $row[15] ?? '';
-        $searchableValues[] = $notes[$transactionNumber] ?? '';
-        foreach ($searchableValues as $value) {
-            $match = function_exists('mb_stripos')
-                ? mb_stripos($value, $selectedSearch, 0, 'UTF-8')
-                : stripos($value, $selectedSearch);
-            if ($match !== false) {
-                return true;
-            }
-        }
-
-        return false;
-    }));
-}
-
-$totalAmountCents = 0;
-foreach ($rows as $row) {
-    $amount = $row[10] ?? '';
-    if (preg_match('/^(-?)(\d+)(?:\.(\d{1,2}))?$/D', $amount, $matches) !== 1) {
-        throw new RuntimeException('Ongeldig bedrag aangetroffen in het transactiebestand.');
-    }
-
-    $cents = ((int) $matches[2] * 100) + (int) str_pad($matches[3] ?? '', 2, '0');
-    $totalAmountCents += $matches[1] === '-' ? -$cents : $cents;
-}
-
-$absoluteTotalCents = abs($totalAmountCents);
-$totalAmount = ($totalAmountCents < 0 ? '-' : '')
-    . number_format(intdiv($absoluteTotalCents, 100), 0, ',', '.')
-    . ','
-    . str_pad((string) ($absoluteTotalCents % 100), 2, '0', STR_PAD_LEFT);
+include 'inc/init_index.php';
 ?>
 <!doctype html>
 <html lang="nl">
@@ -163,7 +28,18 @@ $totalAmount = ($totalAmountCents < 0 ? '-' : '')
                 <thead>
                     <tr>
                         <?php foreach ($visibleColumns as $index): ?>
-                            <th><?= escapeHtml($headers[$index]) ?></th>
+                            <?php if ($index === 0): ?>
+                                <th scope="col" aria-sort="<?= $sortDirection === 'datum-oplopend' ? 'ascending' : ($sortDirection === 'datum-aflopend' ? 'descending' : 'none') ?>">
+                                    <span class="date-sort-header">
+                                        <?= escapeHtml($headers[$index]) ?>
+                                        <a class="date-sort-link" href="<?= escapeHtml($dateSortUrl) ?>" aria-label="<?= escapeHtml($dateSortLabel) ?>">
+                                            <i class="fa-solid <?= escapeHtml($dateSortIcon) ?>" aria-hidden="true"></i>
+                                        </a>
+                                    </span>
+                                </th>
+                            <?php else: ?>
+                                <th><?= escapeHtml($headers[$index]) ?></th>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     </tr>
                 </thead>
