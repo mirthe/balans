@@ -5,9 +5,11 @@ Een kleine, zelfgebouwde PHP-applicatie om financiële transacties lokaal te bek
 ## Functionaliteit
 
 - Financiële transacties importeren op basis van CSV-exports van ASN Bank.
-- Transacties per jaar en maand inzien.
-- Transacties per categorie bekijken, in tabel en als pie chart.
-- Transacties voorzien van tags voor verdere classificatie en groepering.
+- Transacties per jaar en maand inzien en op datum oplopend of aflopend sorteren.
+- Transacties filteren op categorie en doorzoeken op naam, omschrijving, transactienummer en tags.
+- Totalen per categorie bekijken in een tabel en als piechart.
+- Maandelijkse trends in inkomsten en uitgaven bekijken, met filters op categorie en zoekterm. De maandtotalen tonen ook het netto saldo en linken door naar de bijbehorende transacties.
+- Tags per periode bekijken, gerangschikt op gebruik, en doorklikken naar de bijbehorende transacties.
 - Dark mode (woohoo!)
 
 <p align="center">
